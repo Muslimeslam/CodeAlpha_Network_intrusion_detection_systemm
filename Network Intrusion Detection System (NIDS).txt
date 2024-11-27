@@ -1,0 +1,102 @@
+1. Title Page
+Project Title: Network Intrusion Detection System
+Date: November 27, 2024
+Author: Muslim Eslam
+Organization/Team Name: Individual Project
+Version: 1.0
+2. Table of Contents
+Title Page
+Table of Contents
+Executive Summary
+Introduction
+Objectives and Goals
+Methodology
+Project Implementation
+Analysis and Discussion
+Conclusion
+Recommendations
+Acknowledgments
+References
+3. Executive Summary
+The Network Intrusion Detection System (NIDS) project was implemented on Kali Linux using Suricata to monitor and analyze network traffic. The system focuses on identifying specific types of activities, such as ICMP ping requests, FTP control connections, inbound HTTP traffic, and SMTP traffic. This report details the system's configuration, rule creation, testing, and performance analysis, along with recommendations for future enhancements.
+
+4. Introduction
+Background
+With cyber threats on the rise, an effective NIDS is essential for monitoring network activities and detecting malicious behavior. Suricata, a high-performance open-source NIDS, offers rule-based traffic analysis for various protocols.
+
+Purpose
+This project demonstrates the deployment of a basic NIDS using Suricata, capable of detecting key network activities.
+
+Scope
+The focus is on using predefined rules to monitor specific network traffic types. Features like real-time dashboards or automated remediation are outside the current scope.
+
+Audience
+This report targets cybersecurity enthusiasts, students, and professionals interested in network intrusion detection.
+
+5. Objectives and Goals
+Deploy and configure Suricata on Kali Linux.
+Implement and test custom rules to monitor specific network traffic.
+Analyze and validate captured traffic based on rule triggers.
+6. Methodology
+Project Plan
+Setup and Configuration: Installing Suricata on Kali Linux and configuring the network interface.
+Rule Creation: Writing custom rules for detecting specific traffic.
+Traffic Monitoring: Capturing and analyzing traffic based on the rules.
+Techniques and Tools
+Tool: Suricata
+Operating System: Kali Linux
+Rules: Custom rules to detect ICMP, FTP, HTTP, and SMTP traffic
+Data Collection
+Suricata was configured to monitor network traffic in real-time, logging packets matching the defined rules.
+
+Challenges and Assumptions
+Challenges: Handling high traffic volumes and ensuring rule accuracy.
+Assumptions: Network interfaces and permissions are configured properly for packet capture.
+7. Project Implementation
+Development
+The system uses the following rules for traffic analysis:
+
+ICMP Ping Requests:
+plaintext
+Copy code
+alert icmp any any -> $HOME_NET any (msg:"ICMP Ping Request Detected"; sid:100001; rev:1;)
+FTP Control Connections:
+plaintext
+Copy code
+alert tcp $HOME_NET any -> any 21 (msg:"FTP Control Connection Detected"; sid:100002; rev:1;)
+Inbound HTTP Traffic:
+plaintext
+Copy code
+alert tcp any any -> $HOME_NET 80 (msg:"Inbound HTTP Traffic Detected"; sid:100003; rev:1;)
+SMTP Traffic:
+plaintext
+Copy code
+alert tcp $HOME_NET any -> any 25 (msg:"SMTP Traffic Detected"; sid:100004; rev:1;)
+Testing and Evaluation
+Simulated traffic was generated using tools like ping, FTP clients, and HTTP/S traffic to validate rule effectiveness. Alerts were captured in the Suricata log files.
+
+Results
+The system successfully detected and logged matching traffic for all specified rules, confirming its functionality.
+
+8. Analysis and Discussion
+Interpretation of Results
+The defined rules effectively captured and logged targeted traffic. Alerts generated in the logs validated the system's accuracy.
+
+Comparison with Objectives
+The project achieved its goal of monitoring network traffic based on predefined rules.
+
+Lessons Learned
+Writing precise rules enhances detection accuracy.
+Effective log management is crucial for analyzing traffic efficiently.
+9. Conclusion
+The project demonstrated a practical implementation of an NIDS using Suricata on Kali Linux. The system effectively monitored and logged network traffic for ICMP, FTP, HTTP, and SMTP.
+
+10. Recommendations
+Expand rule sets for detecting other protocols and threats.
+Integrate with visualization tools like Kibana for better log analysis.
+Enhance system scalability to handle larger networks.
+11. Acknowledgments
+Gratitude to the Suricata community and open-source contributors for providing comprehensive documentation and tools.
+
+12. References
+Suricata Documentation: https://suricata.io/

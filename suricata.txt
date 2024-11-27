@@ -1,0 +1,123 @@
+How to Run Suricata on Kali Linux
+Suricata is a powerful open-source network intrusion detection system (NIDS) that monitors network traffic for suspicious activities. This guide walks you through installing, configuring, and running Suricata on Kali Linux.
+
+Prerequisites
+A system running Kali Linux.
+Sudo or root privileges.
+Basic understanding of network interfaces and protocols.
+Installation
+Step 1: Update Your System
+bash
+Copy code
+sudo apt update && sudo apt upgrade -y
+Step 2: Install Suricata
+bash
+Copy code
+sudo apt install suricata -y
+Step 3: Verify Installation
+Check the version to ensure Suricata is installed correctly:
+
+bash
+Copy code
+suricata --version
+Configuration
+Step 1: Identify Your Network Interface
+Determine the network interface to monitor using:
+
+bash
+Copy code
+ip addr
+For example, eth0, wlan0, or any active interface.
+
+Step 2: Configure Suricata
+The main configuration file is located at:
+
+plaintext
+Copy code
+/etc/suricata/suricata.yaml
+You can edit it with any text editor, such as nano:
+
+bash
+Copy code
+sudo nano /etc/suricata/suricata.yaml
+Set the HOME_NET variable to represent your internal network. Example:
+
+yaml
+Copy code
+HOME_NET: "[192.168.0.0/24]"
+Step 3: Add Custom Rules
+Suricata rules are located in:
+
+plaintext
+Copy code
+/etc/suricata/rules/
+You can create a custom rule file:
+
+bash
+Copy code
+sudo nano /etc/suricata/rules/custom.rules
+Example rules:
+
+plaintext
+Copy code
+alert icmp any any -> $HOME_NET any (msg:"ICMP Ping Request Detected"; sid:100001; rev:1;)
+alert tcp $HOME_NET any -> any 21 (msg:"FTP Control Connection Detected"; sid:100002; rev:1;)
+alert tcp any any -> $HOME_NET 80 (msg:"Inbound HTTP Traffic Detected"; sid:100003; rev:1;)
+alert tcp $HOME_NET any -> any 25 (msg:"SMTP Traffic Detected"; sid:100004; rev:1;)
+Update the suricata.yaml file to include the custom rules file:
+
+yaml
+Copy code
+rule-files:
+  - custom.rules
+Running Suricata
+Step 1: Test the Configuration
+Validate your Suricata configuration:
+
+bash
+Copy code
+sudo suricata -T -c /etc/suricata/suricata.yaml -v
+Step 2: Start Suricata in Live Mode
+Run Suricata to monitor traffic on your chosen interface:
+
+bash
+Copy code
+sudo suricata -c /etc/suricata/suricata.yaml -i <network-interface>
+Replace <network-interface> with the appropriate interface, e.g., eth0 or wlan0.
+
+Step 3: Monitor Logs
+Suricata logs and alerts are stored in:
+
+plaintext
+Copy code
+/var/log/suricata/
+To view alerts:
+
+bash
+Copy code
+sudo tail -f /var/log/suricata/fast.log
+Testing Suricata
+Generate test traffic to verify detection:
+
+Ping Test:
+
+bash
+Copy code
+ping -c 4 <target-ip>
+Check the logs for ICMP alerts.
+
+FTP Test:
+Use an FTP client to connect to an FTP server.
+
+HTTP Test:
+Access a website using a browser or curl.
+
+SMTP Test:
+Send an email through an SMTP server (if available).
+
+Stopping Suricata
+To stop Suricata, press Ctrl+C in the terminal where it is running. Alternatively, if running as a service:
+
+bash
+Copy code
+sudo systemctl stop suricata
